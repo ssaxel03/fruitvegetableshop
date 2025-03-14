@@ -1,5 +1,7 @@
 FROM openjdk:21-jdk-slim as build
 
+RUN apt-get update && apt-get install -y maven
+
 WORKDIR /app
 
 COPY pom.xml .
