@@ -25,7 +25,12 @@ public class TransactionController {
 
     @PostMapping
     public ResponseEntity<Transaction> addTransaction(@RequestBody Transaction transaction) {
-        return ResponseEntity.ok(transactionService.addTransaction(transaction));
+        try {
+            Transaction savedTransaction = transactionService.addTransaction(transaction);
+            return ResponseEntity.ok(savedTransaction); // 201 Created
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().build(); // 400 Bad Request
+        }
     }
 
     @GetMapping
