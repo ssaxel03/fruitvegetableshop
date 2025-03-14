@@ -29,6 +29,9 @@ public class TransactionController {
             Transaction savedTransaction = transactionService.addTransaction(transaction);
             return ResponseEntity.ok(savedTransaction); // 201 Created
         } catch (IllegalArgumentException ex) {
+            if("Not Found".equals(ex.getMessage())) {
+                return ResponseEntity.notFound().build();
+            }
             return ResponseEntity.badRequest().build(); // 400 Bad Request
         }
     }

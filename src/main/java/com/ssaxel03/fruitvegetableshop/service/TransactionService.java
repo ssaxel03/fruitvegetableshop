@@ -32,12 +32,12 @@ public class TransactionService {
             Product productToBeBought = productService.getProductById(transaction.getProduct().getId()).orElse(null);
 
             if(productToBeBought == null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Not Found");
             }
 
             transaction.setProduct(productToBeBought);
 
-            this.wallet.deposit(transaction.getValue());
+            this.wallet.deposit(transaction.getValue() * transaction.getQuantity());
             return transactionRepository.save(transaction);
         }
     
@@ -46,12 +46,12 @@ public class TransactionService {
             Product productToBeBought = productService.getProductById(transaction.getProduct().getId()).orElse(null);
 
             if(productToBeBought == null) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Not Found");
             }
 
             transaction.setProduct(productToBeBought);
 
-            if (this.wallet.withdraw(transaction.getValue())) {
+            if (this.wallet.withdraw(transaction.getValue() * transaction.getQuantity())) {
                 return transactionRepository.save(transaction);
             } else {
                 throw new IllegalArgumentException("Insufficient funds in wallet for SELL transaction");
